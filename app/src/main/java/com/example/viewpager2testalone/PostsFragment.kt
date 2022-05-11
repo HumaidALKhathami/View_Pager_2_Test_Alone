@@ -1,13 +1,11 @@
 package com.example.viewpager2testalone
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -15,7 +13,6 @@ private const val TAG = "PostsFragment"
 
 class PostsFragment : Fragment() {
     private val innerList: MutableList<String> = mutableListOf()
-    private lateinit var liveDataList: MutableLiveData<List<String>>
 
     private lateinit var layoutManager: LinearLayoutManager
 
@@ -43,31 +40,17 @@ class PostsFragment : Fragment() {
 
         layoutManager = LinearLayoutManager(context)
 
-        liveDataList = MutableLiveData()
+        postsRv.adapter = PostsAdapter(innerList)
 
-        liveDataList.value = innerList
-        liveDataList.observe(viewLifecycleOwner) {
-            updateUI(it)
-        }
-        Log.d(TAG, "onCreateView: ")
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "onViewCreate: ")
-    }
 
     override fun onResume() {
         super.onResume()
         postsRv.layoutManager = layoutManager
     }
 
-    private fun updateUI(innerList: List<String>) {
-        val adapter = PostsAdapter(innerList)
-
-        postsRv.adapter = adapter
-    }
 }
 
 class PostsAdapter(private val innerList: List<String>) : RecyclerView.Adapter<PostsViewHolder>() {
